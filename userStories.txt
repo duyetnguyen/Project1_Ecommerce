@@ -11,7 +11,7 @@ User stories:
 6.	Customer will checkout.
 7.	As an admin, I can add a new product to the stock.
 8.	Admin can update a product price.
-9.	Admin wants to update product price.
 10.	Admin has the ability to update product quantity.
 11.	Admin wants to print out customer shopping history.
 12.	Admin can review and print out customer info.
+
