@@ -31,21 +31,21 @@ public class Order {
     private Long id;
 
     @NotBlank
-    @Column(name = "Order_number", nullable = false)
+    @Column(name = "OrderNumber", nullable = false)
     private String order_number;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customerId", nullable = false)
     private Customer customer;   // many-to-one relationship with Customer
 
     @NotNull
-    @Column(name = "Order_date", nullable = false, updatable = false)   
+    @Column(name = "OrderDate", nullable = false, updatable = false)   
     private Instant order_date;
 
     @NotNull
     @DecimalMin(value = "0.00", inclusive = false)
     @Digits(integer = 8, fraction = 2)
-    @Column(name = "Sub_total", nullable = false,precision = 10, scale = 2)
+    @Column(name = "SubTotal", nullable = false,precision = 10, scale = 2)
     private BigDecimal sub_total;
 
     @NotNull
@@ -74,13 +74,13 @@ public class Order {
     @Column(name = "paid", nullable = false)
     private Boolean paid; // payment status
 
-    @Column(name = "shipped_date")
+    @Column(name = "shippedDate")
     private LocalDateTime shipped_date; // date when the order was shipped
 
-    @Column(name = "payment_method",  length = 50 )
+    @Column(name = "paymentMethod",  length = 50 )
     private String payment_method; // e.g., "Credit Card", "PayPal"
 
-    @Column(name = "payment_date" )
+    @Column(name = "paymentDate" )
     private LocalDateTime payment_date; // date when the payment was made
 
 }
