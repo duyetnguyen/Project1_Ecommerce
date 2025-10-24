@@ -22,7 +22,7 @@ import com.test.ecommerce.product.Product;
     @Index(name = "ix_oi_product", columnList = "product_id")
   }
 )
-public class Item_in_Order {
+public class OrderItem {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

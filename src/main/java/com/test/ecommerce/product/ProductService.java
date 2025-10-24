@@ -3,7 +3,7 @@ package com.test.ecommerce.product;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -18,18 +18,18 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Validated
 @Transactional
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;   // Dependency Injection of ProductRepository
     private final CategoryRepository categoryRepository;                     // Missing initialization
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-    }
+  
     
     /*
      * Create Product method
@@ -76,7 +76,7 @@ public class ProductService {
             return productRepository.findAll(pageable);
 
         }
-        return productRepository.findByNameContainingIgnoreCase(nameContains.trim(),pageable)
+        return productRepository.findByNameContainingIgnoreCase(nameContains.trim(),pageable);
         
     }
     @Transactional

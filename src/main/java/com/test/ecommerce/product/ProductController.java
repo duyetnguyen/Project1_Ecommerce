@@ -50,7 +50,7 @@ public class ProductController {
             Product created = productService.create(cmd);
             
             var body = ProductDtos.fromEntity(created);
-            var location = URI.create("/api/products" + created.getId());
+            var location = URI.create("/api/products/" + created.getId());
 
             return ResponseEntity
                     .created(location)
@@ -157,9 +157,7 @@ public class ProductController {
        Small request DTOs (local)
        =========================== */
 
-    public record AdjustStockRequest(int delta) {}
-
-    public record SetStockRequest(@NotNull @Min(0) Integer stock) {}
+    
 
     
 }

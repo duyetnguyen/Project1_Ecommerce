@@ -51,7 +51,7 @@ public class CategoryService {
     @Transactional
     public void delete(@NotNull Long id) {
         // block deletion if products exist in this category
-        if (productRepository.existsByCategoryId(id)) {
+        if (productRepository.existsByCategory_Id(id)) {
             throw new CategoryInUseException(id);
         }
         categoryRepository.deleteById(id);
