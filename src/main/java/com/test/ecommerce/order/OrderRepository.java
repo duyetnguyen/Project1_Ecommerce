@@ -11,10 +11,10 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // Use explicit JPQL because the field is named `order_number` (snake_case).
-    @Query("select o from Order o where o.order_number = :orderNumber")
+    @Query("select o from Order o where o.orderNumber = :orderNumber")
     Optional<Order> findByOrderNumber(@Param("orderNumber") String orderNumber);
 
-    @Query("select (count(o) > 0) from Order o where o.order_number = :orderNumber")
+    @Query("select (count(o) > 0) from Order o where o.orderNumber = :orderNumber")
     boolean existsByOrderNumber(@Param("orderNumber") String orderNumber);
 
     Page<Order> findByStatusIgnoreCase(String status, Pageable pageable);

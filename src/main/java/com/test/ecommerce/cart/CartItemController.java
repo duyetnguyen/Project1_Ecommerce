@@ -26,7 +26,7 @@ public class CartItemController {
     private static ItemResponse toResponse(CartItem ci) {
         return new ItemResponse(
                 ci.getId(),
-                ci.getCart().getCart_id(),
+                ci.getCart().getId(),
                 ci.getProduct().getId(),
                 ci.getQuantity()
         );

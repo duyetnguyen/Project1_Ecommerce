@@ -17,7 +17,8 @@ import java.time.Instant;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)   // only include fields marked
 @Entity
 @Table(name = "orders",  indexes = {
-    @Index(name = "ix_orders_customer", columnList = "customer_id")
+    @Index(name = "ix_orders_customer", columnList = "customer_id"),
+    @Index(name = "ix_orders_order_number", columnList = "order_number")
   },
   uniqueConstraints = {
     @UniqueConstraint(name = "uk_orders_order_number", columnNames = "order_number")
@@ -31,22 +32,22 @@ public class Order {
     private Long id;
 
     @NotBlank
-    @Column(name = "OrderNumber", nullable = false)
-    private String order_number;
+    @Column(name = "orderNumber", nullable = false)
+    private String orderNumber;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customerId", nullable = false)
-    private Customer customer;   // many-to-one relationship with Customer
+    @JoinColumn(name = "customer_Id", nullable = false)
+    private Customer customerid;   // many-to-one relationship with Customer
 
     @NotNull
-    @Column(name = "OrderDate", nullable = false, updatable = false)   
-    private Instant order_date;
+    @Column(name = "Order_Date", nullable = false, updatable = false)   
+    private Instant orderdate;
 
     @NotNull
     @DecimalMin(value = "0.00", inclusive = false)
     @Digits(integer = 8, fraction = 2)
-    @Column(name = "SubTotal", nullable = false,precision = 10, scale = 2)
-    private BigDecimal sub_total;
+    @Column(name = "Sub_Total", nullable = false,precision = 10, scale = 2)
+    private BigDecimal subtotal;
 
     @NotNull
     @DecimalMin(value = "0.00", inclusive = false)
@@ -74,13 +75,13 @@ public class Order {
     @Column(name = "paid", nullable = false)
     private Boolean paid; // payment status
 
-    @Column(name = "shippedDate")
-    private LocalDateTime shipped_date; // date when the order was shipped
+    @Column(name = "shipped_Date")
+    private LocalDateTime shippeddate; // date when the order was shipped
 
-    @Column(name = "paymentMethod",  length = 50 )
-    private String payment_method; // e.g., "Credit Card", "PayPal"
+    @Column(name = "payment_ref",  length = 50 )
+    private String payment_ref; // e.g., "Credit Card", "PayPal"
 
-    @Column(name = "paymentDate" )
-    private LocalDateTime payment_date; // date when the payment was made
+    @Column(name = "payment_Date" )
+    private LocalDateTime paymentdate; // date when the payment was made
 
 }

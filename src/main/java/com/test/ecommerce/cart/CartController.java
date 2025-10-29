@@ -18,17 +18,12 @@ public class CartController {
 
     private final CartService cartService;
 
-    // DTOs
     public record CreateCartRequest(@NotNull Long customerId) {}
     public record CartResponse(Long cartId, Long customerId, Instant createdAt, Instant updatedAt) {}
 
     private static CartResponse toResponse(Cart c) {
-        return new CartResponse(
-                c.getCart_id(),
-                c.getCustomer_id(),
-                c.getCreated_at(),
-                c.getUpdated_at()
-        );
+        Long customerId = (c.getCustomer() != null ? c.getCustomer().getId() : null);
+        return new CartResponse(c.getId(), customerId, c.getCreatedAt(), c.getUpdatedAt());
     }
 
     @PostMapping
@@ -39,9 +34,8 @@ public class CartController {
 
     @GetMapping("/{cartId}")
     public CartResponse getOne(@PathVariable Long cartId) {
-        Cart cart = cartService.getById(cartId)
+        return cartService.getById(cartId).map(CartController::toResponse)
                 .orElseThrow(() -> new CartNotFoundException(cartId));
-        return toResponse(cart);
     }
 
     @GetMapping("/by-customer/{customerId}")
@@ -60,12 +54,9 @@ public class CartController {
         cartService.delete(cartId);
     }
 
-    // Simple 404 mapper
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CartNotFoundException.class)
-    public String handleNotFound(CartNotFoundException ex) {
-        return ex.getMessage();
-    }
+    public String handleNotFound(CartNotFoundException ex) { return ex.getMessage(); }
 
     static class CartNotFoundException extends RuntimeException {
         CartNotFoundException(Long id) { super("Cart not found: " + id); }

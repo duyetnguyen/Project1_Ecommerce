@@ -53,18 +53,18 @@ public class OrderService {
         }
 
         Order o = Order.builder()
-                .order_number(cmd.orderNumber())
-                .customer(customer)
-                .order_date(when)
-                .sub_total(cmd.subTotal())
+                .orderNumber(cmd.orderNumber())
+                .customerid(customer)
+                .orderdate(when)
+                .subtotal(cmd.subTotal())
                 .tax(cmd.tax())
                 .shipping(cmd.shipping())
                 .total(computedTotal)
                 .status(cmd.status())
                 .paid(Boolean.FALSE.equals(cmd.paid()) ? false : (cmd.paid() != null && cmd.paid()))
-                .shipped_date(cmd.shippedDate())
-                .payment_method(cmd.paymentMethod())
-                .payment_date(cmd.paymentDate())
+                .shippeddate(cmd.shippedDate())
+                .payment_ref(cmd.paymentMethod())
+                .paymentdate(cmd.paymentDate())
                 .build();
 
         return orderRepository.save(o);
@@ -109,8 +109,8 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
         o.setPaid(paid);
         if (paid) {
-            if (paymentDate != null) o.setPayment_date(paymentDate);
-            if (paymentMethod != null && !paymentMethod.isBlank()) o.setPayment_method(paymentMethod);
+            if (paymentDate != null) o.setPaymentdate(paymentDate);
+            if (paymentMethod != null && !paymentMethod.isBlank()) o.setPayment_ref(paymentMethod);
         }
         return orderRepository.save(o);
     }
@@ -119,7 +119,7 @@ public class OrderService {
     public Order setShipped(@NotNull Long id, @NotNull LocalDateTime shippedAt) {
         Order o = orderRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
-        o.setShipped_date(shippedAt);
+        o.setShippeddate(shippedAt);
         o.setStatus("Shipped");
         return orderRepository.save(o);
     }
@@ -129,7 +129,7 @@ public class OrderService {
                               @NotNull BigDecimal tax, @NotNull BigDecimal shipping) {
         Order o = orderRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
-        o.setSub_total(subTotal);
+        o.setSubtotal(subTotal);
         o.setTax(tax);
         o.setShipping(shipping);
         o.setTotal(subTotal.add(tax).add(shipping));

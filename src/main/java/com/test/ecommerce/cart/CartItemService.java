@@ -83,7 +83,7 @@ public class CartItemService {
 
     private void bumpCartUpdatedAt(Long cartId) {
         cartRepository.findById(cartId).ifPresent(c -> {
-            c.setUpdated_at(java.time.Instant.now());
+            c.setUpdatedAt(java.time.Instant.now());
             // save not necessary if within persistence context; but safe:
             cartRepository.save(c);
         });

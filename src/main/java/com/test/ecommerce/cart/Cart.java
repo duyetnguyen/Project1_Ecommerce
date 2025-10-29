@@ -1,33 +1,50 @@
 package com.test.ecommerce.cart;
 
-import jakarta.persistence.*; // for JPA annotations
-import jakarta.validation.constraints.*; // for validation annotations
-import lombok.*;
+import com.test.ecommerce.customer.Customer;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "carts")
-
-
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cart_id; // primary key ID
+    @Column(name = "id") // DB column is `id`
+    private Long id;
 
-    @NotNull
-    @Column(name = "customer_id", nullable = false)
-    private Long customer_id; // foreign key to Customer
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false) // maps the `customer_id` column
+    private Customer customer;
 
-    @NotNull
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> items = new ArrayList<>();
+
     @Column(name = "created_at", nullable = false, updatable = false)
-    private java.time.Instant created_at; // timestamp when the cart was created
+    private Instant createdAt;
 
-    @NotNull
     @Column(name = "updated_at", nullable = false)
-    private java.time.Instant updated_at; // timestamp when the cart was last updated
+    private Instant updatedAt;
+
+    @PrePersist
+    void onCreate() {
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }
+

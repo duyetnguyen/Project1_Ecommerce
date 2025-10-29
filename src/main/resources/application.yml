@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://nlrevature1.crwgy8emwlhz.us-east-2.rds.amazonaws.com:3306/ecommerce?useSSL=true&requireSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: admin
+    password: Revature_room5
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # dev-only: 'update' if you want Hibernate to create tables
+    properties:
+      hibernate.format_sql: true
+      hibernate.jdbc.time_zone: UTC

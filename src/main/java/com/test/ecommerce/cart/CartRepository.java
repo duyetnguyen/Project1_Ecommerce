@@ -10,23 +10,24 @@ import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query("select c from Cart c where c.customer_id = :customerId")
+    // if you ever need it:
+    @Query("select c from Cart c where c.customer.id = :customerId")
     List<Cart> findByCustomerId(@Param("customerId") Long customerId);
 
     @Query("""
            select c from Cart c
-           where c.customer_id = :customerId
-           order by c.updated_at desc
+           where c.customer.id = :customerId
+           order by c.updatedAt desc
            """)
-    List<Cart> findAllByCustomerIdOrderByUpdatedDesc(@Param("customerId") Long customerId);
+    List<Cart> findAllByCustomerIdOrderByUpdatedAtDesc(@Param("customerId") Long customerId);
 
     @Query("""
            select c from Cart c
-           where c.customer_id = :customerId
-           order by c.updated_at desc
+           where c.customer.id = :customerId
+           order by c.updatedAt desc
            """)
-    Optional<Cart> findTopByCustomerIdOrderByUpdatedDesc(@Param("customerId") Long customerId);
+    Optional<Cart> findTopByCustomerIdOrderByUpdatedAtDesc(@Param("customerId") Long customerId);
 
-    @Query("select count(c) > 0 from Cart c where c.customer_id = :customerId and c.created_at >= :since")
+    @Query("select count(c) > 0 from Cart c where c.customer.id = :customerId and c.createdAt >= :since")
     boolean existsForCustomerSince(@Param("customerId") Long customerId, @Param("since") Instant since);
 }

@@ -24,6 +24,7 @@ import com.test.ecommerce.product.Product;
   }
 )
 public class CartItem {
+  
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include

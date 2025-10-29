@@ -1,5 +1,7 @@
 package com.test.ecommerce.cart;
 
+import com.test.ecommerce.customer.Customer;
+import com.test.ecommerce.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,14 +15,16 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final CustomerRepository customerRepository;
 
     @Transactional
     public Cart createCart(Long customerId) {
-        var now = Instant.now();
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerId));
+
         Cart cart = new Cart();
-        cart.setCustomer_id(customerId);
-        cart.setCreated_at(now);
-        cart.setUpdated_at(now);
+        cart.setCustomer(customer);
+        // createdAt/updatedAt set by @PrePersist
         return cartRepository.save(cart);
     }
 
@@ -31,20 +35,20 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public List<Cart> getByCustomer(Long customerId) {
-        return cartRepository.findAllByCustomerIdOrderByUpdatedDesc(customerId);
+        return cartRepository.findAllByCustomerIdOrderByUpdatedAtDesc(customerId);
     }
 
     @Transactional
     public Cart touch(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found: " + cartId));
-        cart.setUpdated_at(Instant.now());
+        cart.setUpdatedAt(Instant.now());
         return cartRepository.save(cart);
     }
 
     @Transactional
     public void delete(Long cartId) {
-        if (!cartRepository.existsById(cartId)) return; // idempotent
+        if (!cartRepository.existsById(cartId)) return;
         cartRepository.deleteById(cartId);
     }
 }
