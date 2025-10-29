@@ -1,0 +1,112 @@
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Left side with promo */
+.auth-left {
+  flex: 1;
+  background: linear-gradient(135deg, #f6d365, #fda085);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.auth-left h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.auth-left p {
+  font-size: 1.2rem;
+  max-width: 300px;
+}
+
+/* Right side with form */
+.auth-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.auth-tabs button {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.auth-tabs button.active {
+  border-bottom: 2px solid #fda085;
+  font-weight: bold;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+}
+
+.auth-form input {
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.auth-form button {
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, #f6d365, #fda085);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-form button:hover {
+  opacity: 0.9;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+  .auth-left,
+  .auth-right {
+    flex: unset;
+    width: 100%;
+    box-shadow: none;
+  }
+  .auth-left {
+    padding: 3rem 1rem;
+  }
+  .auth-right {
+    padding: 2rem 1rem;
+  }
+}

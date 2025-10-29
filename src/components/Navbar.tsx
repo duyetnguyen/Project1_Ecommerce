@@ -3,10 +3,14 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaShoppingCart, FaUser } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onSearchChange?: (searchTerm: string) => void; // <-- new prop for live search
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onSearchChange }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const location = useLocation(); // 👈 to detect current route
+  const location = useLocation(); // to detect current route
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +51,11 @@ const Navbar: React.FC = () => {
             type="text"
             placeholder="Search products..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              if (onSearchChange) onSearchChange(e.target.value); //  notify parent (Products.tsx)
+            }}
+
             style={{
               padding: "6px 35px 6px 10px", // extra space on right for the clear button
               borderRadius: "6px",

@@ -1,6 +1,5 @@
 import React from "react";
 import type { Category } from "../pages/Products";
-import { FaBars } from "react-icons/fa";
 
 interface SubNavbarProps {
   categories: Category[];
@@ -41,7 +40,6 @@ const SubNavbar: React.FC<SubNavbarProps> = ({
           color: "white",
         }}
       >
-        <FaBars size={30} />
         {categories.map((category) => (
           <button
             key={category}

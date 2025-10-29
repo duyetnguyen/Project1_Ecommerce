@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import SubNavbar from "../components/SubNavbar";
+import { useCart } from "../context/CartContext";
+import Navbar from "../components/Navbar";
 
 export type Category = "Electronics" | "Fashion" | "Home" | "Books";
 
@@ -12,6 +14,13 @@ interface Product {
 const Products: React.FC = () => {
   const categories: Category[] = ["Electronics", "Fashion", "Home", "Books"];
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
+  const { addToCart } = useCart();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  // To store the name of the item just added
+  const [addedItem, setAddedItem] = useState<string>("");
+
 
   const allProducts: Record<Category, Product[]> = {
     Electronics: [
@@ -39,6 +48,13 @@ const Products: React.FC = () => {
       { name: "1984", price: 16, image: "https://th.bing.com/th/id/OIP.RU9EG7SwALpakSkWe4tcEgHaL2?w=197&h=316&c=7&r=0&o=7&cb=12&dpr=1.3&pid=1.7&rm=3" },
     ],
   };
+  // Combine all category arrays into one flat array for global searching
+  const allItems = Object.values(allProducts).flat();
+  const filteredItems = searchTerm
+    ? allItems.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : allProducts[selectedCategory];
 
   const handleCategoryChange = (category: Category) => {
     setSelectedCategory(category);
@@ -46,16 +62,41 @@ const Products: React.FC = () => {
 
   return (
     <div style={{ margin: 0, padding: 0 }}>
+      {/* ✅ Navbar must be inside return */}
+      <Navbar onSearchChange={setSearchTerm} />
+
       {/* SubNavbar */}
       <SubNavbar
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
       />
+      
+      {/* Success alert */}
+      {showSuccess && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#28a745",
+            color: "white",
+            padding: "15px 30px",
+            borderRadius: "10px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+          }}
+        >
+         {addedItem} added to cart successfully!
+        </div>
+      )}
 
       {/* Product Grid */}
       <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <h2>{selectedCategory}</h2>
+        {/* ✅ Dynamic title */}
+        <h2>
+          {searchTerm.trim() ? "Search Results" : selectedCategory}
+        </h2>
         <div
           style={{
             display: "flex",
@@ -65,7 +106,13 @@ const Products: React.FC = () => {
             marginTop: "20px",
           }}
         >
-          {allProducts[selectedCategory].map((product) => (
+          {(searchTerm
+              ? allItems.filter((product) =>
+                  product.name.toLowerCase().includes(searchTerm.toLowerCase())
+                ) //  show all matches across categories
+              : allProducts[selectedCategory] //  default to selected category
+            ).map((product) => (
+
             <div
               key={product.name}
               style={{
@@ -92,6 +139,16 @@ const Products: React.FC = () => {
                 ${product.price.toFixed(2)}
               </p>
               <button
+                onClick={() => {
+                  addToCart({
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                  });
+                  setAddedItem(product.name); // store the name of the added item
+                  setShowSuccess(true); // show success alert
+                  setTimeout(() => setShowSuccess(false), 2000); // hide after 2s
+                }}
                 style={{
                   backgroundColor: "#edca03",
                   color: "black",
@@ -109,6 +166,15 @@ const Products: React.FC = () => {
               </button>
             </div>
           ))}
+          {/* Show message when no results */}
+          {searchTerm &&
+          allItems.filter((product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+          ).length === 0 && (
+            <p style={{ marginTop: "20px", fontStyle: "italic" }}>
+              No products found.
+            </p>
+          )}
         </div>
       </div>
     </div>
